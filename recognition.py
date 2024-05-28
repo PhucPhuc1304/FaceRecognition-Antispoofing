@@ -17,12 +17,12 @@ frame_size = (640, 480)
 SAMPLE_IMAGE_PATH = "./images/sample/"
 DATA_PATH = './data'
 power = pow(10, 6)
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
 model = InceptionResnetV1(
     classify=False,
-    pretrained="casia-webface"
-).to(0)
+    pretrained="casia-webface").to(device)
 model.eval()
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 frame_size = (1000, 1000)
 DATA_PATH = './data'
 mtcnn = MTCNN( keep_all=True, device=device)
@@ -78,7 +78,7 @@ def extract_face(box, img, margin=20):
 
 def Recognition(model_dir, device_id):
     model_test = AntiSpoofPredict(device_id)
-    capture = cv2.VideoCapture(1)# chỉnh thành 0 nếu không chạy được (STT camera)
+    capture = cv2.VideoCapture(0)# chỉnh thành 0 nếu không chạy được (STT camera)
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     image_cropper = CropImage()
